@@ -15,6 +15,8 @@ interface Props {
   value: string | null;
   name?: string | null;
   onChange: (url: string | null) => void;
+  /** Workspace logos are stored apart from the member's own avatar history. */
+  purpose?: "avatar" | "workspace-logo";
 }
 
 /**
@@ -23,7 +25,7 @@ interface Props {
  * The raw storage URL is never shown — the bytes land in the Scaleway client
  * bucket under the member's user id (Neon fallback when storage is off).
  */
-export function AvatarUpload({ value, name, onChange }: Props) {
+export function AvatarUpload({ value, name, onChange, purpose }: Props) {
   const { t } = useI18n();
   const upload = useServerFn(uploadAvatar);
   const input = useRef<HTMLInputElement>(null);
@@ -53,7 +55,7 @@ export function AvatarUpload({ value, name, onChange }: Props) {
         reader.readAsDataURL(blob);
       });
 
-      const result = await upload({ data: { base64, contentType } });
+      const result = await upload({ data: { base64, contentType, ...(purpose ? { purpose } : {}) } });
       if (!result.ok || !result.url) throw new Error(result.message ?? t("avatar.err.upload"));
 
       onChange(result.url);

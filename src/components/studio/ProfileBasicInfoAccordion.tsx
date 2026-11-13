@@ -170,6 +170,7 @@ export function ProfileBasicInfoAccordion({
                 value={avatarUrl || null}
                 name={displayName}
                 onChange={(url) => onAvatarUrlChange(url ?? "")}
+                purpose={variant === "workspace" ? "workspace-logo" : undefined}
               />
               <div className="space-y-1.5">
                 <label className="text-[11px] font-medium text-muted-foreground">

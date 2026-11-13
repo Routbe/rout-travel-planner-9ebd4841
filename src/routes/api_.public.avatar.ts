@@ -30,10 +30,15 @@ export const Route = createFileRoute("/api_/public/avatar")({
 
         try {
           const { sql } = await import("@/lib/neon");
-          const rows = (await sql.query(
-            `select content_type, data from public.avatar_objects where path = $1`,
-            [path],
-          )) as { content_type: string; data: string }[];
+          type AvatarRow = { content_type: string; data: string };
+          let rows: AvatarRow[];
+          try {
+            // Owner-scoped table: anonymous visitors read through the narrow 0251 function.
+            rows = (await sql.query(`select content_type, data from public.rout_public_avatar($1)`, [path])) as AvatarRow[];
+          } catch {
+            // Database not yet at 0251: keep the previous direct read.
+            rows = (await sql.query(`select content_type, data from public.avatar_objects where path = $1`, [path])) as AvatarRow[];
+          }
           const row = rows[0];
           if (!row) return new Response("Not found", { status: 404 });
 
