@@ -15,7 +15,7 @@
 
 ## Workspace Studio
 - [x] New profile photo does not save in Workspace Studio: Studio uploads as workspace-logo, /api/public/avatar reads via rout_public_avatar (db/0251 live on Neon, public read verified)
-- [ ] Workspace logos: prune keeps every photo still in use (db/0252 rout_prune_avatar_uploads, code + tests done); apply db/0252 on Neon, until then nothing is pruned
+- [x] Workspace logos: prune keeps every photo still in use (db/0252 rout_prune_avatar_uploads, live on Neon)
 - [x] Workspace conversion: workspaces.avatar_url set from the live design's photo (conversionWorkspaceLogo)
 - [ ] Converted workspace logo stored in the Neon fallback still belongs to the retired login (cascade on a hard user delete); copy it into the workspace owner's uploads if hard deletes are ever enabled
 - [x] "ROUT OS v2.5 Alle systemen operationeel" overlaps bottom preview buttons on phone; check similar overlaps
@@ -25,4 +25,4 @@
 - [x] Key delivery to the personalisation station: HPKE P-256 sealed bundle (0248 live)
 - [x] Station registry (0248) + HPKE-wrapped batch key export on /admin/cards, logged via mark_sdm_batch_exported
 - [x] db/0249 (drop station-less export marker) moved into db/ after production reported 0248
-- [ ] db/0250 card tap as step-up factor (EXPAND): in db/, not yet applied on Neon (last applied: 0249)
+- [x] db/0250 card tap as step-up factor (EXPAND, live on Neon)
