@@ -86,8 +86,16 @@ export async function enrolledFactors(userId: string): Promise<EnrolledFactors &
   } catch {
     sms = false;
   }
+  // An activated, unrevoked physical ROUT Card (db/0250); storage errors count as no card.
+  let card = false;
+  try {
+    const { vaultPort } = await import("@/lib/vault/vault-port.server");
+    card = await vaultPort().memberCardFactor({ userId });
+  } catch {
+    card = false;
+  }
   // Recovery codes only belong to an active authenticator app.
-  return { authUserId: r?.auth_id ?? null, totp, passkey: Boolean(r?.passkey), sms, backup: totp && Boolean(r?.backup), password: Boolean(r?.password) };
+  return { authUserId: r?.auth_id ?? null, totp, passkey: Boolean(r?.passkey), sms, backup: totp && Boolean(r?.backup), password: Boolean(r?.password), card };
 }
 
 /**

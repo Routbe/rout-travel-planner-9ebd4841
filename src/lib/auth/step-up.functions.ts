@@ -12,7 +12,7 @@ export const getStepUpOptions = createServerFn({ method: "GET" })
   .handler(async ({ data, context }) => {
     const { enrolledFactors } = await import("./step-up.server");
     const f = await enrolledFactors(context.userId);
-    const enrolled = { passkey: f.passkey, totp: f.totp, sms: !!f.sms, backup: !!f.backup, password: !!f.password };
+    const enrolled = { passkey: f.passkey, totp: f.totp, sms: !!f.sms, backup: !!f.backup, password: !!f.password, card: !!f.card };
     return { methods: allowedStepUpMethods(enrolled, data?.action), enrolled };
   });
 
