@@ -57,7 +57,7 @@ afterAll(async () => db?.close());
 
 describe("photo cleanup keeps photos in use (db/0252)", () => {
   it("removes unused uploads beyond the newest 3", async () => {
-    const all = [];
+    const all: string[] = [];
     for (let i = 1; i <= 5; i++) all.push(await upload(ALICE, "avatar", i));
     expect(await prune(ALICE, "avatar")).toBe(2);
     expect(await paths(ALICE)).toEqual(all.slice(2));
