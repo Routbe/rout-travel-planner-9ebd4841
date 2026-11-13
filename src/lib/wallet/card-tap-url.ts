@@ -67,3 +67,15 @@ export async function scanCardTaps(signal: AbortSignal, onTap: (tap: CardTapPara
   reader.addEventListener("readingerror", () => { if (!signal.aborted) onUnreadable?.(); }, { signal });
   await reader.scan({ signal });
 }
+
+/**
+ * What a tap on /t may do. A step-up is confirmed only when the signed-in member
+ * pressed "confirm" on /t; any other tap is a public authenticity proof and never
+ * completes an open step-up, so an unrelated tap cannot approve a request
+ * started elsewhere (for example from a stolen session).
+ */
+export type CardTapPurpose = "proof" | "step_up";
+export function cardTapRoute(purpose: CardTapPurpose, signedIn: boolean): "step_up" | "proof" | "refuse" {
+  if (purpose === "step_up") return signedIn ? "step_up" : "refuse";
+  return "proof";
+}
