@@ -7,7 +7,7 @@ const CARDS = [
   { to: "/console/apps", title: "Identity & OAuth", kicker: "Login met ROUT", text: "Beheer OIDC-apps, credentials, redirects, scopes en beveiligingsflows.", icon: Blocks },
   { to: "/console/api", title: "API Keys & Webhooks", kicker: "Directe integraties", text: "Maak beperkte sleutels, bekijk endpoints en bereid webhook-integraties voor.", icon: KeyRound },
   { to: "/console/connectors", title: "AI & MCP Connectors", kicker: "Claude, Cursor & agents", text: "Verbind AI-clients met ROUT-tools via Model Context Protocol.", icon: Bot },
-  { to: "/console/billing", title: "Billing & Usage", kicker: "Limieten & facturatie", text: "Een centrale plek voor toekomstig verbruik, limieten en facturen.", icon: ReceiptText },
+  { to: "/console/billing", title: "Billing & Usage", kicker: "Limieten & facturatie", text: "Je plan, de limieten die gelden en de regels voor eerlijk gebruik.", icon: ReceiptText },
 ] as const;
 
 export const Route = createFileRoute("/_authenticated/console/")({

@@ -188,8 +188,8 @@
   "stepUp.cardScan": "Scan kaart met deze telefoon",
   "stepUp.cardScanning": "Houd de kaart nu tegen de achterkant van deze telefoon…",
   "stepUp.cardChecking": "Kaart wordt gecontroleerd…",
-  "stepUp.cardOtherDeviceNfc": "Lukt scannen niet? Houd de kaart gewoon tegen je telefoon en open de melding. Dit scherm bevestigt daarna vanzelf.",
-  "stepUp.cardOtherDevice": "Op iPhone: houd de kaart bovenaan je telefoon en tik op de melding. Op een computer: gebruik een telefoon waarop je met dit account bent ingelogd. Kom daarna terug; dit scherm bevestigt vanzelf.",
+  "stepUp.cardOtherDeviceNfc": "Lukt scannen niet? Houd de kaart gewoon tegen je telefoon, open de melding en tik op “Ja, ik bevestig”. Dit scherm gaat daarna vanzelf verder.",
+  "stepUp.cardOtherDevice": "Op iPhone: houd de kaart bovenaan je telefoon, tik op de melding en daarna op “Ja, ik bevestig”. Op een computer: gebruik een telefoon waarop je met dit account bent ingelogd. Dit scherm gaat daarna vanzelf verder.",
   "stepUp.cardTimeLeft": "Nog {{time}}",
   "stepUp.cardExpired": "De tijd is verstreken. Begin opnieuw.",
   "stepUp.cardRetry": "Opnieuw beginnen",
@@ -197,5 +197,16 @@
   "stepUp.cardUnreadable": "Dit is geen ROUT Card-tik. Houd je ROUT Card tegen de telefoon.",
   "stepUp.cardUnavailable": "Je hebt geen actieve ROUT Card die je hiervoor kunt gebruiken.",
   "stepUp.cardLimited": "Te veel pogingen. Probeer het later opnieuw.",
-  "stepUp.cardNfcBlocked": "NFC kon niet starten. Zet NFC aan en geef de browser toestemming, of houd de kaart gewoon tegen je telefoon."
+  "stepUp.cardNfcBlocked": "NFC kon niet starten. Zet NFC aan en geef de browser toestemming, of houd de kaart gewoon tegen je telefoon.",
+  "console.billing.title": "Facturatie & verbruik",
+  "console.billing.description": "Wat je integraties kosten, welke limieten gelden en wat we verwachten bij gebruik.",
+  "console.billing.planTitle": "Je plan",
+  "console.billing.planName": "Ontwikkelaarstoegang zonder facturatieaccount",
+  "console.billing.planText": "Voor apps, Login met ROUT, API-sleutels, webhooks en MCP-connectors heb je vandaag geen facturatieaccount nodig. Komen er ooit betaalde onderdelen bij, dan zie je ze hier vooraf en kies je zelf of je ze gebruikt.",
+  "console.billing.limitsTitle": "Limieten",
+  "console.billing.limitAuthorize": "Autorisatieverzoeken: {{n}} per minuut per account.",
+  "console.billing.limitsText": "Gaat een API-verzoek over een limiet, dan krijg je een 429 met een Retry-After-header. Wacht dat aantal seconden voor je het opnieuw probeert.",
+  "console.billing.fairUseTitle": "Fair use",
+  "console.billing.fairUseText": "Gebruik de API voor echte integraties en automatisering. Bij overmatige belasting, scraping of verdacht verkeer kan ROUT de toegang meteen vertragen, opschorten of intrekken.",
+  "console.billing.termsLink": "Lees de voorwaarden voor API-gebruik"
 }
