@@ -400,3 +400,7 @@ export async function completeCardStepUpTap(userId: string, input: unknown, deps
   return port.completeCardStepUp({ userId }, grant).catch(() => false);
 }
 
+/** Lost or replaced: every physical card of the member stops working at once (db/0253). */
+export function revokeMemberCards(userId: string, deps: Deps = {}): Promise<number> {
+  return (deps.port ?? vaultPort()).revokeMemberCards({ userId });
+}
