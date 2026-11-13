@@ -404,3 +404,18 @@ export async function completeCardStepUpTap(userId: string, input: unknown, deps
 export function revokeMemberCards(userId: string, deps: Deps = {}): Promise<number> {
   return (deps.port ?? vaultPort()).revokeMemberCards({ userId });
 }
+
+/**
+ * A blocked or replaced ROUT card also retires the member's physical cards, so a
+ * lost chip can no longer confirm anything. Never throws: a refusal is logged
+ * and recorded as a security event.
+ */
+export async function retireMemberCards(userId: string, deps: Deps = {}): Promise<void> {
+  try {
+    await revokeMemberCards(userId, deps);
+  } catch {
+    console.error("[card] physical card revoke failed");
+    const { recordSecurityEvent } = await import("@/lib/audit-log.server");
+    void recordSecurityEvent({ eventType: "card.physical_revoke_failed", userId, payload: {} });
+  }
+}

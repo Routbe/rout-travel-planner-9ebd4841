@@ -382,21 +382,6 @@ export const lockMyCard = createServerFn({ method: "POST" })
     return { ok: true as const };
   });
 
-/**
- * A blocked or replaced ROUT card also retires the member's physical NTAG cards,
- * so a lost chip can no longer confirm anything. Logged when the vault refuses.
- */
-async function retirePhysicalCards(userId: string) {
-  try {
-    const { revokeMemberCards } = await import("@/lib/vault/sdm-tap.server");
-    await revokeMemberCards(userId);
-  } catch {
-    console.error("[card] physical card revoke failed");
-    const { recordSecurityEvent } = await import("@/lib/audit-log.server");
-    void recordSecurityEvent({ eventType: "card.physical_revoke_failed", userId, payload: {} });
-  }
-}
-
 /** Owner only: permanently block the private ROUT card (lost or stolen). Irreversible. */
 export const blockMyCard = createServerFn({ method: "POST" })
   .middleware([requireAuth])
@@ -407,7 +392,7 @@ export const blockMyCard = createServerFn({ method: "POST" })
     const mine = await myRootCard(context.userId);
     if (!mine) return { ok: false as const, error: "no_card" as const };
     if (mine.state === "blocked") {
-      await retirePhysicalCards(context.userId);
+      await (await import("@/lib/vault/sdm-tap.server")).retireMemberCards(context.userId);
       return { ok: true as const };
     }
     const { ensureStepUpSession, consumeStepUp } = await import("@/lib/auth/step-up.server");
@@ -424,7 +409,7 @@ export const blockMyCard = createServerFn({ method: "POST" })
       const { setGoogleKeyPassState } = await import("./google-wallet-sync.server");
       await setGoogleKeyPassState([mine.keySerial], "INACTIVE", process.env as Record<string, string | undefined>);
     }
-    await retirePhysicalCards(context.userId);
+    await (await import("@/lib/vault/sdm-tap.server")).retireMemberCards(context.userId);
     const { closeCardUnlock } = await import("./card-unlock.server");
     await closeCardUnlock(context.userId);
     const { recordSecurityEvent } = await import("@/lib/audit-log.server");
@@ -462,7 +447,7 @@ export const replaceMyCard = createServerFn({ method: "POST" })
       const { setGoogleKeyPassState } = await import("./google-wallet-sync.server");
       await setGoogleKeyPassState([mine.keySerial], "INACTIVE", process.env as Record<string, string | undefined>);
     }
-    await retirePhysicalCards(context.userId);
+    await (await import("@/lib/vault/sdm-tap.server")).retireMemberCards(context.userId);
     const { closeCardUnlock } = await import("./card-unlock.server");
     await closeCardUnlock(context.userId);
     const fresh = await myRootCard(context.userId);
