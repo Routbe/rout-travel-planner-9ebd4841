@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
 import { Loader2, ShieldCheck, ShieldX } from "lucide-react";
-import { verifyCardTapFn, type CardTapResult } from "@/lib/wallet/card-tap.functions";
+import { pendingCardStepUpFn, verifyCardTapFn, type CardTapResult } from "@/lib/wallet/card-tap.functions";
 import { activateCardFn, type CardActivationResult } from "@/lib/wallet/card-admin.functions";
 import { takeActivationIntent } from "@/lib/wallet/card-activation-intent";
 import { Button } from "@/components/ui/button";
@@ -34,11 +34,14 @@ type View =
   | { kind: "checking" }
   | { kind: "missing" }
   | { kind: "activate" | "activating"; p: string; m: string }
+  | { kind: "confirm_step_up" | "confirming_step_up"; p: string; m: string }
+  | { kind: "step_up_declined" }
   | { activation: CardActivationResult["status"] }
   | CardTapResult;
 
 function CardTap() {
   const verify = useServerFn(verifyCardTapFn);
+  const pendingStepUp = useServerFn(pendingCardStepUpFn);
   const activate = useServerFn(activateCardFn);
   const [code, setCode] = useState("");
   const [view, setView] = useState<View>({ kind: "checking" });
@@ -62,10 +65,64 @@ function CardTap() {
       setView({ kind: "activate", p, m });
       return;
     }
-    verify({ data: { p, m } })
-      .then((r) => setView(r))
+    // An open card step-up is only confirmed after the member says yes here;
+    // the single-use tap bytes stay in memory until then and are never spent on a proof.
+    pendingStepUp()
+      .then(({ pending }) => {
+        if (pending) {
+          setView({ kind: "confirm_step_up", p, m });
+          return;
+        }
+        return verify({ data: { p, m, purpose: "proof" } }).then((r) => setView(r));
+      })
       .catch(() => setView({ status: "denied" }));
-  }, [verify]);
+  }, [verify, pendingStepUp]);
+
+  if ("kind" in view && (view.kind === "confirm_step_up" || view.kind === "confirming_step_up")) {
+    const busy = view.kind === "confirming_step_up";
+    const tapBytes = { p: view.p, m: view.m };
+    return (
+      <main className="mx-auto flex min-h-[80vh] max-w-md flex-col items-center justify-center gap-6 p-6 text-center">
+        <ShieldCheck className="h-14 w-14 text-primary" strokeWidth={1.5} aria-hidden />
+        <div className="space-y-2">
+          <h1 className="text-2xl font-semibold">Bevestigen met je ROUT Card?</h1>
+          <p className="text-sm text-muted-foreground">
+            Er wacht een verzoek om met je ROUT Card te bevestigen. Bevestig alleen als jij die actie net zelf hebt gestart, op dit toestel of op een ander scherm.
+          </p>
+        </div>
+        <div className="flex w-full flex-col gap-3">
+          <Button
+            className="w-full"
+            disabled={busy}
+            onClick={() => {
+              if (busy) return;
+              setView({ kind: "confirming_step_up", ...tapBytes });
+              verify({ data: { ...tapBytes, purpose: "step_up" } })
+                .then((r) => setView(r))
+                .catch(() => setView({ status: "step_up_denied" }));
+            }}
+          >
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : "Ja, ik bevestig"}
+          </Button>
+          <Button variant="outline" className="w-full" disabled={busy} onClick={() => setView({ kind: "step_up_declined" })}>
+            Nee, dit was ik niet
+          </Button>
+        </div>
+      </main>
+    );
+  }
+  if ("kind" in view && view.kind === "step_up_declined") {
+    return (
+      <main className="mx-auto flex min-h-[80vh] max-w-md flex-col items-center justify-center gap-4 p-6 text-center">
+        <ShieldX className="h-14 w-14 text-destructive" strokeWidth={1.5} aria-hidden />
+        <h1 className="text-2xl font-semibold">Niets bevestigd</h1>
+        <p className="text-sm text-muted-foreground">
+          Het verzoek vervalt vanzelf binnen 5 minuten. Heb je dit niet zelf gevraagd? Bekijk dan je actieve sessies in je account en meld onbekende toestellen af.
+        </p>
+        <Link to="/studio/account" className="text-sm text-primary underline underline-offset-4">Naar je account</Link>
+      </main>
+    );
+  }
 
   if ("kind" in view && (view.kind === "activate" || view.kind === "activating")) {
     const busy = view.kind === "activating";
