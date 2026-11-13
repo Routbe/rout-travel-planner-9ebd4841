@@ -10,12 +10,18 @@
 - [ ] step_up purpose (card_tap method for card_reveal / card_lifecycle)
 - [x] Admin batch screen (/admin/cards): create, station config export, manifest import; member activation (db/0246, live on Neon)
 
+## Auth
+- [x] Passkey-only registration enforced server-side (user.create hook + bridge refuses members without a passkey)
+
 ## Workspace Studio
-- [ ] New profile photo does not save in Workspace Studio (e.g. maximilien-6yak, private account switched to workspace)
+- [ ] New profile photo does not save in Workspace Studio (e.g. maximilien-6yak): code fixed (Studio uploads as workspace-logo, /api/public/avatar reads via rout_public_avatar); apply db/0251 on Neon to finish
+- [ ] Workspace logos: prune only unreferenced workspace-logo uploads (now 3 per member, not per workspace)
+- [ ] Workspace conversion: set workspaces.avatar_url from the transferred live Studio photo
 - [x] "ROUT OS v2.5 Alle systemen operationeel" overlaps bottom preview buttons on phone; check similar overlaps
 
 - [x] 0247 hardening (live on Neon, verified): constant-time activation-hash compare, SERIALIZABLE + retry for consume/activate, deny-all RLS on vault_enclave (review before apply)
 - [x] Station file v2: correct NDEF offsets, encrypted UID+counter, ChangeFileSettings payload
 - [x] Key delivery to the personalisation station: HPKE P-256 sealed bundle (0248 live)
 - [x] Station registry (0248) + HPKE-wrapped batch key export on /admin/cards, logged via mark_sdm_batch_exported
-- [ ] Move db-pending/0249 (drop station-less export marker) into db/ once production reports schema >= 0248
+- [x] db/0249 (drop station-less export marker) moved into db/ after production reported 0248
+- [x] db/0250 card tap as step-up factor (EXPAND)
