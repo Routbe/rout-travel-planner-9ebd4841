@@ -380,3 +380,23 @@ export async function exportStationBundle(adminId: string, batchId: string, stat
     batchPlain?.fill(0);
   }
 }
+
+// ---------------------------------------------------------------- step-up (db/0250)
+
+/**
+ * A tap of the member's own card completes their open card step-up intent: the
+ * tap is verified like a public proof, then complete_card_step_up spends the
+ * grant for 'step_up' (owner-checked) in the same transaction. False on every
+ * denial (no open intent, another member's card, a revoked card, a replay).
+ */
+export async function completeCardStepUpTap(userId: string, input: unknown, deps: Deps = {}): Promise<boolean> {
+  const port = deps.port ?? vaultPort();
+  let grant: TapGrant;
+  try {
+    grant = await verifyCardTap(input, { ...deps, port });
+  } catch {
+    return false;
+  }
+  return port.completeCardStepUp({ userId }, grant).catch(() => false);
+}
+

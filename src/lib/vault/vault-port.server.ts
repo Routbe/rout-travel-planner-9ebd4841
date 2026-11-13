@@ -123,6 +123,8 @@ export interface IVaultPort {
   completeCardStepUp(caller: VaultCaller, grant: TapGrant): Promise<boolean>;
   /** Claims a completed intent once; returns its scope, or null (not yet completed or denied). */
   claimCardStepUp(caller: VaultCaller, intent: CardStepUpIntent): Promise<CardStepUpScope | null>;
+  /** Revokes every physical ROUT Card the caller owns (lost / replaced, db/0253); returns how many. */
+  revokeMemberCards(caller: VaultCaller): Promise<number>;
   /** Admin: batches with card counts, no key material. */
   listSdmBatches(caller: VaultCaller): Promise<SdmBatchSummary[]>;
   /** Admin: pins a personalisation station by its raw P-256 public key (db/0248). */
@@ -460,6 +462,12 @@ export class LocalPostgresVaultAdapter implements IVaultPort {
     const rows = await this.exec(callerId(caller), "select vault_enclave.claim_card_step_up($1) as scope", [intent], { serializable: true });
     const scope = rows[0]?.["scope"];
     return CARD_STEP_UP_SCOPES.includes(scope as CardStepUpScope) ? (scope as CardStepUpScope) : null;
+  }
+
+  async revokeMemberCards(caller: VaultCaller): Promise<number> {
+    const rows = await this.exec(callerId(caller), "select vault_enclave.revoke_member_cards() as n", [], { serializable: true });
+    const n = Number(rows[0]?.["n"]);
+    return Number.isSafeInteger(n) && n >= 0 ? n : 0;
   }
 
   async listSdmBatches(caller: VaultCaller): Promise<SdmBatchSummary[]> {
