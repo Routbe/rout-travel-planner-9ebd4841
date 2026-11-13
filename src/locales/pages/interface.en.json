@@ -197,5 +197,16 @@
   "stepUp.cardUnreadable": "That was not a ROUT Card tap. Hold your ROUT Card against the phone.",
   "stepUp.cardUnavailable": "You have no active ROUT Card you can use for this.",
   "stepUp.cardLimited": "Too many attempts. Try again later.",
-  "stepUp.cardNfcBlocked": "NFC could not start. Turn NFC on and allow the browser, or just hold the card against your phone."
+  "stepUp.cardNfcBlocked": "NFC could not start. Turn NFC on and allow the browser, or just hold the card against your phone.",
+  "console.billing.title": "Billing & usage",
+  "console.billing.description": "What your integrations cost, which limits apply and what we expect from usage.",
+  "console.billing.planTitle": "Your plan",
+  "console.billing.planName": "Developer access without a billing account",
+  "console.billing.planText": "Apps, Login with ROUT, API keys, webhooks and MCP connectors need no billing account today. If paid features are ever added, you will see them here first and choose whether to use them.",
+  "console.billing.limitsTitle": "Limits",
+  "console.billing.limitAuthorize": "Authorization requests: {{n}} per minute per IP.",
+  "console.billing.limitsText": "Go over a limit and you get a 429 with a Retry-After header. Wait that many seconds before trying again.",
+  "console.billing.fairUseTitle": "Fair use",
+  "console.billing.fairUseText": "Use the API for genuine integrations and automation. On excessive load, scraping or suspicious traffic, ROUT can throttle, suspend or revoke access immediately.",
+  "console.billing.termsLink": "Read the API terms"
 }
