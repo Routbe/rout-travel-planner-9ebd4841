@@ -1,6 +1,6 @@
 import { sql, withDbContext } from "@/lib/neon";
 import { hashToken } from "@/lib/auth/token-hash.server";
-import { canExecute, pickConversionDesign, suggestedConversionSlug, type ConversionDraft, checkTarget, readConversionDetails, statusAfter, SUNSET_DAYS, SUNSET_MEMBER_ROLE, type ConversionDetails, type TransferStatus } from "./workspace-conversion-rules";
+import { canExecute, conversionWorkspaceLogo, pickConversionDesign, suggestedConversionSlug, type ConversionDraft, checkTarget, readConversionDetails, statusAfter, SUNSET_DAYS, SUNSET_MEMBER_ROLE, type ConversionDetails, type TransferStatus } from "./workspace-conversion-rules";
 import { isValidWorkspaceSlug } from "./workspace-rules";
 
 /**
@@ -209,6 +209,7 @@ async function maybeExecute(transferId: string): Promise<{ completed: boolean; w
   const withSlug = (p: Record<string, unknown> | null) => (p ? JSON.stringify({ ...p, username: slug }) : null);
   const live = withSlug(design.live);
   const concept = withSlug(design.concept);
+  const logo = conversionWorkspaceLogo(design.live);
   const { resolveInvites } = await import("./workspaces.server");
   const invites = (await resolveInvites(details.invites, src).catch((): Awaited<ReturnType<typeof resolveInvites>> => [])).filter((i) => i.userId !== t.target_user_id);
 
@@ -219,10 +220,11 @@ async function maybeExecute(transferId: string): Promise<{ completed: boolean; w
           and target_user_id is not null and expires_at > now()`,
     sql`select public.wt_assert(exists(select 1 from public.workspace_transfers where id = ${t.id}
         and status = 'completed' and workspace_id is null), 'transfer_not_ready')`,
-    sql`insert into public.workspaces (id, name, slug, stripe_customer_id, billing_name, vat_number, legacy_user_id, description, category)
+    // The live design's photo becomes the workspace logo (switcher, hub, cards), as after a Studio publish.
+    sql`insert into public.workspaces (id, name, slug, stripe_customer_id, billing_name, vat_number, legacy_user_id, description, category, avatar_url)
         select ${ws}::uuid, ${t.workspace_name}, ${slug}, u.app_metadata->>'stripe_customer_id',
                coalesce(u.app_metadata->>'billing_name', ${t.workspace_name}), u.app_metadata->>'vat_number', u.id,
-               ${details.description || null}, ${details.category}
+               ${details.description || null}, ${details.category}, ${logo}
         from public.users u where u.id = ${src}`,
     // Billing moves with the customer id: clear it on the user so nothing bills twice.
     sql`update public.users set app_metadata = coalesce(app_metadata, '{}'::jsonb) - 'stripe_customer_id'

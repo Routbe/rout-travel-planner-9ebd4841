@@ -14,9 +14,10 @@
 - [x] Passkey-only registration enforced server-side (user.create hook + bridge refuses members without a passkey)
 
 ## Workspace Studio
-- [ ] New profile photo does not save in Workspace Studio (e.g. maximilien-6yak): code fixed (Studio uploads as workspace-logo, /api/public/avatar reads via rout_public_avatar); apply db/0251 on Neon to finish
-- [ ] Workspace logos: prune only unreferenced workspace-logo uploads (now 3 per member, not per workspace)
-- [ ] Workspace conversion: set workspaces.avatar_url from the transferred live Studio photo
+- [x] New profile photo does not save in Workspace Studio: Studio uploads as workspace-logo, /api/public/avatar reads via rout_public_avatar (db/0251 live on Neon, public read verified)
+- [ ] Workspace logos: prune keeps every photo still in use (db/0252 rout_prune_avatar_uploads, code + tests done); apply db/0252 on Neon, until then nothing is pruned
+- [x] Workspace conversion: workspaces.avatar_url set from the live design's photo (conversionWorkspaceLogo)
+- [ ] Converted workspace logo stored in the Neon fallback still belongs to the retired login (cascade on a hard user delete); copy it into the workspace owner's uploads if hard deletes are ever enabled
 - [x] "ROUT OS v2.5 Alle systemen operationeel" overlaps bottom preview buttons on phone; check similar overlaps
 
 - [x] 0247 hardening (live on Neon, verified): constant-time activation-hash compare, SERIALIZABLE + retry for consume/activate, deny-all RLS on vault_enclave (review before apply)
