@@ -68,3 +68,6 @@ use the editor.
 - CONTRACT migrations that remove legacy access wait in db-pending/ until production runs the code using the matching EXPAND functions, then move into db/. Why: every file in db/ is replayed by the runners, so a premature contract would break the live deployment.
 - The public health probe reports CODE_SCHEMA_LEVEL (src/lib/schema-version.ts, kept equal to the highest db/ migration by a test); a held-back contract is applied only once production reports at least the level of its EXPAND migration. Why: it is the only outside proof of which code a deployment runs.
 - Before a contract closes a table, the EXPAND step turns every SECURITY INVOKER function or trigger that touches it into SECURITY DEFINER. Why: triggers run with the caller's rights, so a closed table would silently break app writes on other tables.
+
+## Account creation
+- A Better Auth user row is created only inside runPasskeyAccountCreation (passkey-enrollment.server.ts); the user.create.before hook refuses every other path and the bridge creates no public.users row for an identity without a passkey. Why: registration must be passkey-only regardless of which provider or plugin is enabled.
