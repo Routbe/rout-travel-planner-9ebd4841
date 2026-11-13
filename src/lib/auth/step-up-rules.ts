@@ -4,15 +4,18 @@
  * fallback for accounts that have neither.
  * ROUT card actions accept every factor the member has active (passkey, TOTP,
  * SMS, recovery code, password), but never e-mail, and only after 2FA is on.
+ * A tap of the member's own physical ROUT Card ("card", db/0250) counts like an
+ * authenticator app: card actions and general sensitive actions, never a vault
+ * read or a card scan. Only the server grants it, after a verified, owner-checked tap.
  */
 export const STEP_UP_MAX_AGE_SEC = 120;
 export const STEP_UP_REQUIRED = "STEP_UP_REQUIRED";
 export const STEP_UP_COOKIE = "rout_stepup";
 
-export type StepUpMethod = "passkey" | "totp" | "email" | "sms" | "backup" | "password";
+export type StepUpMethod = "passkey" | "totp" | "email" | "sms" | "backup" | "password" | "card";
 export type StepUpAction = "vault_export" | "account_delete" | "oauth_secret" | "workspace_role" | "account_merge" | "oauth_subject_type" | "primary_email_change" | "app_email_reassign" | "app_email_revoke" | "passkey_add" | "recovery_vault" | "card_reveal" | "card_lifecycle" | "card_scan" | "vault_token_read";
 
-export type EnrolledFactors = { passkey: boolean; totp: boolean; sms?: boolean; backup?: boolean; password?: boolean };
+export type EnrolledFactors = { passkey: boolean; totp: boolean; sms?: boolean; backup?: boolean; password?: boolean; card?: boolean };
 
 /** Actions on the private ROUT card (show its codes, freeze/block/replace it). */
 export const CARD_STEP_UP_ACTIONS: readonly StepUpAction[] = ["card_reveal", "card_lifecycle"];
@@ -47,6 +50,7 @@ export function allowedStepUpMethods(enrolled: EnrolledFactors, action?: StepUpA
     if (!hasSecondFactor(enrolled)) return [];
     const card: StepUpMethod[] = [];
     if (enrolled.passkey) card.push("passkey");
+    if (enrolled.card) card.push("card");
     if (enrolled.totp) card.push("totp");
     if (enrolled.sms) card.push("sms");
     if (enrolled.backup) card.push("backup");
@@ -55,6 +59,7 @@ export function allowedStepUpMethods(enrolled: EnrolledFactors, action?: StepUpA
   }
   const strong: StepUpMethod[] = [];
   if (enrolled.passkey) strong.push("passkey");
+  if (enrolled.card) strong.push("card");
   if (enrolled.totp) strong.push("totp");
   return strong.length ? strong : ["email"];
 }
@@ -64,10 +69,10 @@ export function methodAcceptedFor(action: StepUpAction, method: StepUpMethod): b
   if (action === VAULT_READ_ACTION) return method === "passkey";
   if (action === CARD_SCAN_ACTION) return method === "passkey" || method === "totp" || method === "sms";
   if (isCardStepUpAction(action)) return method !== "email";
-  return method === "passkey" || method === "totp" || method === "email";
+  return method === "passkey" || method === "totp" || method === "email" || method === "card";
 }
 
-const STEP_UP_METHODS: readonly StepUpMethod[] = ["passkey", "totp", "email", "sms", "backup", "password"];
+const STEP_UP_METHODS: readonly StepUpMethod[] = ["passkey", "totp", "email", "sms", "backup", "password", "card"];
 
 const ACTIONS: readonly StepUpAction[] = ["vault_export", "account_delete", "oauth_secret", "workspace_role", "account_merge", "oauth_subject_type", "primary_email_change", "app_email_reassign", "app_email_revoke", "passkey_add", "recovery_vault", "card_reveal", "card_lifecycle", "card_scan", "vault_token_read"];
 const JTI = /^[A-Za-z0-9_-]{22}$/;

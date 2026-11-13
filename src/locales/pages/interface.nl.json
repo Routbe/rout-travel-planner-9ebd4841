@@ -182,5 +182,20 @@
   "stepUp.password": "Wachtwoord",
   "stepUp.cardDescription": "Je ROUT-kaart is beveiligd. Bevestig met een van je actieve methodes. De bevestiging geldt voor één handeling en vervalt na 2 minuten.",
   "stepUp.needTwoFactor": "Zet eerst tweestapsverificatie aan (passkey, authenticator-app of sms) in je accountinstellingen.",
-  "stepUp.sendSms": "Stuur code per sms"
+  "stepUp.sendSms": "Stuur code per sms",
+  "stepUp.card": "ROUT Card",
+  "stepUp.cardTapHint": "Houd je ROUT Card tegen je telefoon.",
+  "stepUp.cardScan": "Scan kaart met deze telefoon",
+  "stepUp.cardScanning": "Houd de kaart nu tegen de achterkant van deze telefoon…",
+  "stepUp.cardChecking": "Kaart wordt gecontroleerd…",
+  "stepUp.cardOtherDeviceNfc": "Lukt scannen niet? Houd de kaart gewoon tegen je telefoon en open de melding. Dit scherm bevestigt daarna vanzelf.",
+  "stepUp.cardOtherDevice": "Op iPhone: houd de kaart bovenaan je telefoon en tik op de melding. Op een computer: gebruik een telefoon waarop je met dit account bent ingelogd. Kom daarna terug; dit scherm bevestigt vanzelf.",
+  "stepUp.cardTimeLeft": "Nog {{time}}",
+  "stepUp.cardExpired": "De tijd is verstreken. Begin opnieuw.",
+  "stepUp.cardRetry": "Opnieuw beginnen",
+  "stepUp.cardDenied": "Deze kaart werd niet aanvaard. Gebruik je eigen, actieve ROUT Card en tik opnieuw.",
+  "stepUp.cardUnreadable": "Dit is geen ROUT Card-tik. Houd je ROUT Card tegen de telefoon.",
+  "stepUp.cardUnavailable": "Je hebt geen actieve ROUT Card die je hiervoor kunt gebruiken.",
+  "stepUp.cardLimited": "Te veel pogingen. Probeer het later opnieuw.",
+  "stepUp.cardNfcBlocked": "NFC kon niet starten. Zet NFC aan en geef de browser toestemming, of houd de kaart gewoon tegen je telefoon."
 }

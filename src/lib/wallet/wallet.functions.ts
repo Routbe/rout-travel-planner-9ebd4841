@@ -391,7 +391,10 @@ export const blockMyCard = createServerFn({ method: "POST" })
     if (!(await memberHasTwoFactor(context.userId))) return { ok: false as const, error: "two_factor_required" as const };
     const mine = await myRootCard(context.userId);
     if (!mine) return { ok: false as const, error: "no_card" as const };
-    if (mine.state === "blocked") return { ok: true as const };
+    if (mine.state === "blocked") {
+      await (await import("@/lib/vault/sdm-tap.server")).retireMemberCards(context.userId);
+      return { ok: true as const };
+    }
     const { ensureStepUpSession, consumeStepUp } = await import("@/lib/auth/step-up.server");
     await ensureStepUpSession(context.userId, "card_lifecycle");
     await consumeStepUp();
@@ -406,6 +409,7 @@ export const blockMyCard = createServerFn({ method: "POST" })
       const { setGoogleKeyPassState } = await import("./google-wallet-sync.server");
       await setGoogleKeyPassState([mine.keySerial], "INACTIVE", process.env as Record<string, string | undefined>);
     }
+    await (await import("@/lib/vault/sdm-tap.server")).retireMemberCards(context.userId);
     const { closeCardUnlock } = await import("./card-unlock.server");
     await closeCardUnlock(context.userId);
     const { recordSecurityEvent } = await import("@/lib/audit-log.server");
@@ -443,6 +447,7 @@ export const replaceMyCard = createServerFn({ method: "POST" })
       const { setGoogleKeyPassState } = await import("./google-wallet-sync.server");
       await setGoogleKeyPassState([mine.keySerial], "INACTIVE", process.env as Record<string, string | undefined>);
     }
+    await (await import("@/lib/vault/sdm-tap.server")).retireMemberCards(context.userId);
     const { closeCardUnlock } = await import("./card-unlock.server");
     await closeCardUnlock(context.userId);
     const fresh = await myRootCard(context.userId);

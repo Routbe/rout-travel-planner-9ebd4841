@@ -182,5 +182,20 @@
   "stepUp.password": "Mot de passe",
   "stepUp.cardDescription": "Ta carte ROUT est protégée. Confirme avec l'une de tes méthodes actives. La confirmation vaut pour une seule action et expire après 2 minutes.",
   "stepUp.needTwoFactor": "Active d'abord la vérification en deux étapes (clé d'accès, application d'authentification ou SMS) dans les paramètres du compte.",
-  "stepUp.sendSms": "Envoyer le code par SMS"
+  "stepUp.sendSms": "Envoyer le code par SMS",
+  "stepUp.card": "ROUT Card",
+  "stepUp.cardTapHint": "Approche ta ROUT Card de ton téléphone.",
+  "stepUp.cardScan": "Scanner la carte avec ce téléphone",
+  "stepUp.cardScanning": "Approche maintenant la carte du dos de ce téléphone…",
+  "stepUp.cardChecking": "Vérification de la carte…",
+  "stepUp.cardOtherDeviceNfc": "Le scan ne marche pas ? Approche simplement la carte de ton téléphone et ouvre la notification. Cet écran confirme ensuite tout seul.",
+  "stepUp.cardOtherDevice": "Sur iPhone : approche la carte du haut du téléphone et touche la notification. Sur un ordinateur : utilise un téléphone connecté à ce compte. Reviens ensuite ; cet écran confirme tout seul.",
+  "stepUp.cardTimeLeft": "Encore {{time}}",
+  "stepUp.cardExpired": "Le temps est écoulé. Recommence.",
+  "stepUp.cardRetry": "Recommencer",
+  "stepUp.cardDenied": "Cette carte n'a pas été acceptée. Utilise ta propre ROUT Card active et réessaie.",
+  "stepUp.cardUnreadable": "Ce n'était pas une ROUT Card. Approche ta ROUT Card du téléphone.",
+  "stepUp.cardUnavailable": "Tu n'as pas de ROUT Card active utilisable ici.",
+  "stepUp.cardLimited": "Trop de tentatives. Réessaie plus tard.",
+  "stepUp.cardNfcBlocked": "Le NFC n'a pas pu démarrer. Active le NFC et autorise le navigateur, ou approche simplement la carte du téléphone."
 }

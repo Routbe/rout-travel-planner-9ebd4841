@@ -145,6 +145,18 @@ function CardTap() {
             {!view.activated && <p className="mt-2">Deze kaart is nog niet aan een lid gekoppeld.</p>}
           </div>
         </section>
+      ) : "status" in view && view.status === "step_up_confirmed" ? (
+        <section aria-labelledby="tap-step-up" className="flex w-full flex-col items-center gap-4">
+          <ShieldCheck className="h-14 w-14 text-primary" strokeWidth={1.5} aria-hidden />
+          <h1 id="tap-step-up" className="text-2xl font-semibold">Bevestigd met je ROUT Card</h1>
+          <p className="text-sm text-muted-foreground">Ga terug naar het scherm waar je om bevestiging werd gevraagd. Het gaat daar vanzelf verder.</p>
+        </section>
+      ) : "status" in view && view.status === "step_up_denied" ? (
+        <section className="flex flex-col items-center gap-4">
+          <ShieldX className="h-14 w-14 text-destructive" strokeWidth={1.5} aria-hidden />
+          <h1 className="text-2xl font-semibold">Niet bevestigd</h1>
+          <p className="text-sm text-muted-foreground">Deze tik kon je bevestiging niet afronden. Gebruik je eigen, actieve ROUT Card, houd ze opnieuw tegen je telefoon, of begin opnieuw als de tijd verstreken is.</p>
+        </section>
       ) : "status" in view && view.status === "limited" ? (
         <section className="flex flex-col items-center gap-3">
           <h1 className="text-2xl font-semibold">Even wachten</h1>

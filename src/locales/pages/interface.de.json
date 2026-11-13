@@ -182,5 +182,20 @@
   "stepUp.password": "Passwort",
   "stepUp.cardDescription": "Deine ROUT-Karte ist geschützt. Bestätige mit einer deiner aktiven Methoden. Die Bestätigung gilt für eine Aktion und läuft nach 2 Minuten ab.",
   "stepUp.needTwoFactor": "Aktiviere zuerst die Zwei-Schritt-Verifizierung (Passkey, Authentifizierungs-App oder SMS) in deinen Kontoeinstellungen.",
-  "stepUp.sendSms": "Code per SMS senden"
+  "stepUp.sendSms": "Code per SMS senden",
+  "stepUp.card": "ROUT Card",
+  "stepUp.cardTapHint": "Halte deine ROUT Card an dein Handy.",
+  "stepUp.cardScan": "Karte mit diesem Handy scannen",
+  "stepUp.cardScanning": "Halte die Karte jetzt an die Rückseite dieses Handys…",
+  "stepUp.cardChecking": "Karte wird geprüft…",
+  "stepUp.cardOtherDeviceNfc": "Scannen klappt nicht? Halte die Karte einfach an dein Handy und öffne die Mitteilung. Dieser Bildschirm bestätigt dann von selbst.",
+  "stepUp.cardOtherDevice": "Auf dem iPhone: Halte die Karte oben an dein Handy und tippe auf die Mitteilung. Am Computer: Nutze ein Handy, auf dem du mit diesem Konto angemeldet bist. Komm dann zurück; dieser Bildschirm bestätigt von selbst.",
+  "stepUp.cardTimeLeft": "Noch {{time}}",
+  "stepUp.cardExpired": "Die Zeit ist abgelaufen. Beginne neu.",
+  "stepUp.cardRetry": "Neu beginnen",
+  "stepUp.cardDenied": "Diese Karte wurde nicht akzeptiert. Nutze deine eigene aktive ROUT Card und tippe erneut.",
+  "stepUp.cardUnreadable": "Das war keine ROUT Card. Halte deine ROUT Card an das Handy.",
+  "stepUp.cardUnavailable": "Du hast keine aktive ROUT Card, die du dafür nutzen kannst.",
+  "stepUp.cardLimited": "Zu viele Versuche. Versuche es später erneut.",
+  "stepUp.cardNfcBlocked": "NFC konnte nicht starten. Schalte NFC ein und erlaube den Browser, oder halte die Karte einfach an dein Handy."
 }

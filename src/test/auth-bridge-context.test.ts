@@ -3,12 +3,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const calls: { query: string; ctx: string | null }[] = [];
 let current: string | null = null;
 let resolveResult: unknown[] = [];
+let hasPasskey = true;
 
 vi.mock("@/lib/neon", () => {
   const sql = (strings: TemplateStringsArray) => {
     const query = strings.join("?");
     calls.push({ query, ctx: current });
     if (query.includes("rout_resolve_account")) return Promise.resolve(resolveResult);
+    if (query.includes("neon_auth.passkey")) return Promise.resolve(hasPasskey ? [{ "?column?": 1 }] : []);
     if (query.includes("insert into public.users")) {
       return Promise.resolve([{ id: current, email: "a@b.be", user_metadata: {}, created_at: "now" }]);
     }
@@ -28,7 +30,15 @@ vi.mock("@/lib/auth/owner-admin.server", () => ({ ensureOwnerAdmin: async () => 
 const AUTH_ID = "11111111-1111-4111-8111-111111111111";
 
 describe("login → member account bridge", () => {
-  beforeEach(() => { calls.length = 0; resolveResult = []; });
+  beforeEach(() => { calls.length = 0; resolveResult = []; hasPasskey = true; });
+
+  it("never creates a member for an identity without a passkey", async () => {
+    hasPasskey = false;
+    const { bridgeIdentity } = await import("@/lib/auth/bridge.server");
+    const user = await bridgeIdentity({ id: AUTH_ID, email: "A@B.be", name: null, image: null, emailVerified: true });
+    expect(user).toBeNull();
+    expect(calls.some((c) => c.query.includes("insert into public.users"))).toBe(false);
+  });
 
   it("creates a first-time member inside that member's own database scope", async () => {
     const { bridgeIdentity } = await import("@/lib/auth/bridge.server");
