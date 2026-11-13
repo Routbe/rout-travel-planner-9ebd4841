@@ -24,3 +24,17 @@ describe("suggested slug", () => {
     expect(suggestedConversionSlug("maximilien.brussels", "Maximilien")).toBe("maximilien-brussels");
   });
 });
+
+describe("conversion workspace logo", () => {
+  it("the live design's uploaded photo becomes the workspace logo", async () => {
+    const { conversionWorkspaceLogo } = await import("./workspace-conversion-rules");
+    const photo = "/api/public/avatar?path=12345678-1234-1234-1234-123456789abc%2Favatar-1731481234.webp";
+    expect(conversionWorkspaceLogo({ avatarUrl: photo })).toBe(photo);
+  });
+  it("no live design, no photo or an invalid photo gives no logo", async () => {
+    const { conversionWorkspaceLogo } = await import("./workspace-conversion-rules");
+    expect(conversionWorkspaceLogo(null)).toBeNull();
+    expect(conversionWorkspaceLogo({ avatarUrl: "" })).toBeNull();
+    expect(conversionWorkspaceLogo({ avatarUrl: "javascript:alert(1)" })).toBeNull();
+  });
+});
