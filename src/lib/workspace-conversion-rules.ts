@@ -2,6 +2,7 @@
 import { z } from "zod";
 import { INVITE_ROLES, MAX_WIZARD_INVITES, WORKSPACE_CATEGORIES } from "./workspace-wizard";
 import { workspaceBillingSchema } from "./workspace-pricing";
+import { workspaceLogoAfterPublish } from "./workspace-studio";
 
 export const SUNSET_DAYS = 30;
 export const TRANSFER_TTL_DAYS = 7;
@@ -103,4 +104,14 @@ export function pickConversionDesign(i: { verified: boolean; verifiedDraft: Conv
   // Concept: the other design if there is one, otherwise the primary itself.
   const concept = other ? other.payload : primary.payload;
   return { live, concept };
+}
+
+/**
+ * Logo of a freshly converted workspace: the photo of the design that goes live,
+ * under the same rule as a Studio publish. No live design, no photo or an invalid
+ * URL means no logo (the icon/initials show).
+ */
+export function conversionWorkspaceLogo(live: Record<string, unknown> | null): string | null {
+  const photo = live?.["avatarUrl"];
+  return typeof photo === "string" ? workspaceLogoAfterPublish(photo, null) : null;
 }

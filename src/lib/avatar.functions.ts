@@ -19,6 +19,9 @@ const schema = z
   })
   .strict();
 
+/** Unreferenced uploads beyond this many per member and prefix are pruned. */
+const KEEP_UPLOADS = 3;
+
 export const uploadAvatar = createServerFn({ method: "POST" })
   .middleware([requireAuth])
   .inputValidator((input: unknown) => schema.parse(input))
@@ -52,15 +55,13 @@ export const uploadAvatar = createServerFn({ method: "POST" })
          on conflict (path) do update set content_type = excluded.content_type, data = excluded.data`,
         [path, context.userId, real, data.base64],
       );
-      await sql.query(
-        `delete from public.avatar_objects
-         where user_id = $1 and path like $2
-           and path not in (
-             select path from public.avatar_objects where user_id = $1 and path like $2
-             order by created_at desc limit 3
-           )`,
-        [context.userId, `${context.userId}/${prefix}-%`],
-      );
+      // Keep the newest uploads per member and prefix; a photo still shown on a profile,
+      // workspace or draft is never removed (db/0252). Without 0252 nothing is pruned.
+      try {
+        await sql.query(`select public.rout_prune_avatar_uploads($1, $2) as removed`, [prefix, KEEP_UPLOADS]);
+      } catch (error) {
+        console.warn("[avatar] prune skipped", error instanceof Error ? error.message : error);
+      }
       return { ok: true, path, url: `/api/public/avatar?path=${encodeURIComponent(path)}` };
     },
   );
