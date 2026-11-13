@@ -44,7 +44,11 @@ export async function finalizeEnrollment(
     const t = await verifySignupTicket(secret, context, Math.floor(Date.now() / 1000));
     if (!t) throw reject("signup_ticket_invalid");
     if (await adapter.findUserByEmail(t.email)) throw reject("account_exists");
-    const user = await adapter.createUser({ email: t.email, name: t.name || t.email.split("@")[0] || t.email, emailVerified: false });
+    const { runPasskeyAccountCreation } = await import("./account-creation-scope");
+    // The only place a new account may be created: after a verified passkey ceremony.
+    const user = await runPasskeyAccountCreation(() =>
+      adapter.createUser({ email: t.email, name: t.name || t.email.split("@")[0] || t.email, emailVerified: false }),
+    );
     if (!user?.id) throw reject("account_create_failed");
     try {
       const { recordSignupAge } = await import("@/lib/minor-safety.server");

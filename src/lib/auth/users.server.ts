@@ -73,7 +73,9 @@ export async function createUser(input: {
   emailConfirmed?: boolean;
 }): Promise<SessionUser> {
   const email = assertEmail(input.email);
-  if (input.password != null) assertPassword(input.password);
+  // Passkey-only platform: refuse before anything is written (previously the row
+  // was inserted first and the password rejected afterwards).
+  if (input.password != null) throw new AuthError("invalid_credentials", "ROUT accepteert alleen passkeys.");
   if (await findUserByEmail(email))
     throw new AuthError("email_taken", "This e-mail is already registered.");
 
@@ -84,8 +86,6 @@ export async function createUser(input: {
     returning ${sql.unsafe(USER_COLUMNS)}
   `) as Row[];
   const created = toSessionUser(rows[0]!);
-  // Passkey-only platform: passwords are never stored.
-  if (input.password) throw new AuthError("invalid_credentials", "ROUT accepteert alleen passkeys.");
   const { ensureOwnerAdmin } = await import("./owner-admin.server");
   await ensureOwnerAdmin(created.id, email);
   return created;

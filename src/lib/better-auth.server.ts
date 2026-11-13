@@ -354,6 +354,20 @@ export function createRoutAuth(request?: Request) {
     },
     verification: { modelName: "neon_auth.verification" },
     databaseHooks: {
+      user: {
+        create: {
+          // Passkey-only registration: refuse every account creation that is not
+          // the verified first-passkey ceremony (passkey-enrollment.server.ts).
+          before: async () => {
+            const { isPasskeyAccountCreation, PASSKEY_SIGNUP_REQUIRED } = await import("@/lib/auth/account-creation-scope");
+            if (!isPasskeyAccountCreation()) {
+              console.warn("[auth] refused account creation outside the passkey sign-up");
+              const { APIError } = await import("better-auth/api");
+              throw new APIError("FORBIDDEN", { code: PASSKEY_SIGNUP_REQUIRED, message: "Nieuwe accounts kunnen alleen met een passkey worden aangemaakt." });
+            }
+          },
+        },
+      },
       session: {
         create: {
           after: async (session: { id: string; userId?: string; userAgent?: string | null }) => {

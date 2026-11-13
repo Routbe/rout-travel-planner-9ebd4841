@@ -101,6 +101,15 @@ async function bridgeAs(identity: RoutIdentity, authId: string, memberId: string
       await sql`update public.users set last_sign_in_at = now() where id = ${row["id"] as string}`;
     }
   } else {
+    // Passkey-only registration: a first-time member row is created only for an
+    // identity that already owns a passkey (created by the passkey sign-up).
+    const passkeys = (await sql`
+      select 1 from neon_auth.passkey where "userId"::text = ${authId} limit 1
+    `) as Row[];
+    if (!passkeys.length) {
+      console.warn("[auth] refused member creation for an identity without a passkey");
+      return null;
+    }
     const metadata = {
       neon_auth_id: identity.id,
       full_name: identity.name,
