@@ -10,8 +10,13 @@
 - [x] Card tap step-up: "ROUT Card" method in the step-up dialog (Web NFC on Android, /t fallback for iPhone and other devices), accepted for card_reveal, card_lifecycle and general sensitive actions
 - [x] db/0253 card revoke + 0250 audit fix (EXPAND, live on Neon)
 - [x] Blocking or replacing the ROUT card revokes the member's physical cards (db/0253)
-- [ ] Test on real hardware: Android Chrome NFC scan, iPhone tap via /t, desktop + signed-in phone
+- [x] Test on real hardware: Android Chrome NFC scan, iPhone tap via /t, desktop + signed-in phone (owner-tested)
+- [x] /t asks "Ja, ik bevestig" before a tap completes an open card step-up (an unrelated tap can no longer approve a request from another session)
+- [ ] Re-test the /t confirm button on iPhone (changed after the owner's hardware test)
 - [x] Admin batch screen (/admin/cards): create, station config export, manifest import; member activation (db/0246, live on Neon)
+
+## Developer console
+- [x] Billing page: plan without billing account, live limits from the enforced rules, fair use + link to API terms (nl/en/fr/de)
 
 ## Auth
 - [x] Passkey-only registration enforced server-side (user.create hook + bridge refuses members without a passkey)
