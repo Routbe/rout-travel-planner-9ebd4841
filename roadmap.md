@@ -8,7 +8,7 @@
 - [x] schema level 0245, snapshot + db types
 ## ROUT Card tap — later batches
 - [x] Card tap step-up: "ROUT Card" method in the step-up dialog (Web NFC on Android, /t fallback for iPhone and other devices), accepted for card_reveal, card_lifecycle and general sensitive actions
-- [ ] Apply db/0253 on Neon (fixes 0250's audit action check, adds revoke_member_cards); until then every card step-up call fails in the database
+- [x] db/0253 card revoke + 0250 audit fix (EXPAND, live on Neon)
 - [x] Blocking or replacing the ROUT card revokes the member's physical cards (db/0253)
 - [ ] Test on real hardware: Android Chrome NFC scan, iPhone tap via /t, desktop + signed-in phone
 - [x] Admin batch screen (/admin/cards): create, station config export, manifest import; member activation (db/0246, live on Neon)
