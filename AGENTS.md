@@ -71,3 +71,6 @@ use the editor.
 
 ## Account creation
 - A Better Auth user row is created only inside runPasskeyAccountCreation (passkey-enrollment.server.ts); the user.create.before hook refuses every other path and the bridge creates no public.users row for an identity without a passkey. Why: registration must be passkey-only regardless of which provider or plugin is enabled.
+
+## Uploaded photos
+- Neon-fallback photo uploads are pruned only through public.rout_prune_avatar_uploads (db/0252), which keeps every photo a profile, draft, workspace or app logo still references; without it nothing is pruned. Why: a member's uploads serve several workspaces, so a per-member count deleted logos still in use.
