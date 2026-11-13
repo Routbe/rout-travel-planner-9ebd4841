@@ -204,8 +204,8 @@
   "console.billing.planName": "Accès développeur sans compte de facturation",
   "console.billing.planText": "Les apps, la connexion avec ROUT, les clés API, les webhooks et les connecteurs MCP ne nécessitent aujourd'hui aucun compte de facturation. Si des fonctions payantes apparaissent un jour, vous les verrez d'abord ici et choisirez de les utiliser ou non.",
   "console.billing.limitsTitle": "Limites",
-  "console.billing.limitAuthorize": "Demandes d'autorisation : {{n}} par minute par IP.",
-  "console.billing.limitsText": "Au-delà d'une limite, vous recevez une erreur 429 avec un en-tête Retry-After. Attendez ce nombre de secondes avant de réessayer.",
+  "console.billing.limitAuthorize": "Demandes d'autorisation : {{n}} par minute par compte.",
+  "console.billing.limitsText": "Quand une requête API dépasse une limite, vous recevez une erreur 429 avec un en-tête Retry-After. Attendez ce nombre de secondes avant de réessayer.",
   "console.billing.fairUseTitle": "Usage loyal",
   "console.billing.fairUseText": "Utilisez l'API pour de vraies intégrations et de l'automatisation. En cas de charge excessive, de scraping ou de trafic suspect, ROUT peut ralentir, suspendre ou révoquer l'accès immédiatement.",
   "console.billing.termsLink": "Lire les conditions d'utilisation de l'API"

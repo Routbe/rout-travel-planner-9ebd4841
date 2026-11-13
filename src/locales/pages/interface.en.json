@@ -204,8 +204,8 @@
   "console.billing.planName": "Developer access without a billing account",
   "console.billing.planText": "Apps, Login with ROUT, API keys, webhooks and MCP connectors need no billing account today. If paid features are ever added, you will see them here first and choose whether to use them.",
   "console.billing.limitsTitle": "Limits",
-  "console.billing.limitAuthorize": "Authorization requests: {{n}} per minute per IP.",
-  "console.billing.limitsText": "Go over a limit and you get a 429 with a Retry-After header. Wait that many seconds before trying again.",
+  "console.billing.limitAuthorize": "Authorization requests: {{n}} per minute per account.",
+  "console.billing.limitsText": "When an API request goes over a limit, you get a 429 with a Retry-After header. Wait that many seconds before trying again.",
   "console.billing.fairUseTitle": "Fair use",
   "console.billing.fairUseText": "Use the API for genuine integrations and automation. On excessive load, scraping or suspicious traffic, ROUT can throttle, suspend or revoke access immediately.",
   "console.billing.termsLink": "Read the API terms"

@@ -204,8 +204,8 @@
   "console.billing.planName": "Ontwikkelaarstoegang zonder facturatieaccount",
   "console.billing.planText": "Voor apps, Login met ROUT, API-sleutels, webhooks en MCP-connectors heb je vandaag geen facturatieaccount nodig. Komen er ooit betaalde onderdelen bij, dan zie je ze hier vooraf en kies je zelf of je ze gebruikt.",
   "console.billing.limitsTitle": "Limieten",
-  "console.billing.limitAuthorize": "Autorisatieverzoeken: {{n}} per minuut per IP.",
-  "console.billing.limitsText": "Ga je erover, dan krijg je een 429 met een Retry-After-header. Wacht dat aantal seconden voor je het opnieuw probeert.",
+  "console.billing.limitAuthorize": "Autorisatieverzoeken: {{n}} per minuut per account.",
+  "console.billing.limitsText": "Gaat een API-verzoek over een limiet, dan krijg je een 429 met een Retry-After-header. Wacht dat aantal seconden voor je het opnieuw probeert.",
   "console.billing.fairUseTitle": "Fair use",
   "console.billing.fairUseText": "Gebruik de API voor echte integraties en automatisering. Bij overmatige belasting, scraping of verdacht verkeer kan ROUT de toegang meteen vertragen, opschorten of intrekken.",
   "console.billing.termsLink": "Lees de voorwaarden voor API-gebruik"
