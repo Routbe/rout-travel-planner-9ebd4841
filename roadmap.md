@@ -24,4 +24,4 @@
 - [x] Key delivery to the personalisation station: HPKE P-256 sealed bundle (0248 live)
 - [x] Station registry (0248) + HPKE-wrapped batch key export on /admin/cards, logged via mark_sdm_batch_exported
 - [x] db/0249 (drop station-less export marker) moved into db/ after production reported 0248
-- [x] db/0250 card tap as step-up factor (EXPAND)
+- [ ] db/0250 card tap as step-up factor (EXPAND): in db/, not yet applied on Neon (last applied: 0249)
