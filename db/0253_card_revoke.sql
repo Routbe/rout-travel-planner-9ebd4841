@@ -5,7 +5,21 @@
 --  * Open card step-up intents of the caller expire in the same transaction.
 --  * The caller always comes from the transaction context; nothing is trusted
 --    from arguments. Every call lands on the hash-chained audit log.
--- Additive only: one new function, executable by rout_app alone.
+--  * Fix for 0250: its card_step_up_* functions write audit actions that the
+--    audit_logs action check did not list, so every card step-up call raised and
+--    rolled back. The check now lists them (and sdm_card_revoke); widening only.
+-- Additive only: a wider audit action check and one new function, executable by rout_app alone.
+
+alter table vault_enclave.audit_logs drop constraint audit_logs_action_check;
+alter table vault_enclave.audit_logs add constraint audit_logs_action_check
+  check (action in ('step_up_register', 'token_store', 'token_retrieve', 'server_key_register',
+                    'sdm_card_register', 'sdm_recovery_retrieve', 'sdm_recovery_confirm',
+                    'sdm_fleet_register', 'sdm_batch_register', 'sdm_batch_cards_register',
+                    'sdm_tap_begin', 'sdm_tap_confirm', 'sdm_tap_consume',
+                    'sdm_card_activate', 'sdm_batch_list', 'sdm_batch_export',
+                    'sdm_station_register', 'sdm_station_list', 'sdm_station_retire',
+                    'card_step_up_begin', 'card_step_up_complete', 'card_step_up_claim',
+                    'sdm_card_revoke'));
 
 create function vault_enclave.revoke_member_cards()
 returns integer language plpgsql security definer set search_path = pg_catalog as $$
