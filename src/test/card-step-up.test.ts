@@ -15,7 +15,7 @@ import { deriveVaultKek } from "@/lib/vault/server-kek";
 import { activateMemberCard, completeCardStepUpTap, createSdmBatch, createSdmFleetKey, importSdmManifest, revokeMemberCards } from "@/lib/vault/sdm-tap.server";
 import { LocalPostgresVaultAdapter, type VaultSqlExecutor } from "@/lib/vault/vault-port.server";
 import { allowedStepUpMethods, methodAcceptedFor, parseStepUpPayload, proofCoversAction, stepUpPayload } from "@/lib/auth/step-up-rules";
-import { parseCardTapUrl, tapFromNdefRecords } from "@/lib/wallet/card-tap-url";
+import { cardTapRoute, parseCardTapUrl, tapFromNdefRecords } from "@/lib/wallet/card-tap-url";
 
 const ADMIN = "00000000-0000-4000-8000-0000000000ad";
 const ALICE = "00000000-0000-4000-8000-0000000000a1";
@@ -170,5 +170,12 @@ describe("card step-up rules", () => {
     const url = new TextEncoder().encode(`https://rout.be/t?p=${p}&m=${m}`);
     expect(tapFromNdefRecords([{ recordType: "text", data: new DataView(url.buffer) }])).toBeNull();
     expect(tapFromNdefRecords([{ recordType: "url", data: new DataView(url.buffer) }])).toEqual({ p, m });
+  });
+
+  it("a tap on /t confirms a step-up only after the member chose to, and never signed out", () => {
+    expect(cardTapRoute("proof", true)).toBe("proof");
+    expect(cardTapRoute("proof", false)).toBe("proof");
+    expect(cardTapRoute("step_up", true)).toBe("step_up");
+    expect(cardTapRoute("step_up", false)).toBe("refuse");
   });
 });
